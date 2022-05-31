@@ -1,0 +1,8 @@
+torch
+torchvision
+gdown
+opencv-python
+Pillow
+streamlit
+matplotlib
+numpy

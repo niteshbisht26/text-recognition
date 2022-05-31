@@ -1,4 +1,3 @@
-import requests
 from models import YOLONetwork
 from models import CRNNetwork
 import utils
@@ -6,6 +5,7 @@ from PIL import Image
 from io import BytesIO
 import torch
 import streamlit as st
+import gdown
 
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 yolo_input_img_size = (418, 418)
@@ -15,8 +15,12 @@ alphanum2ind, ind2alphanum = utils.get_encodings()
 
 @st.cache
 def get_models():
+    url = 'https://drive.google.com/uc?id=1yveuhLzOkt6VdfHOF2LQCnfuQ5SKi-PW'
+    output = 'yolo_checkpoint'
+    gdown.download(url, output, quiet=False)
+
     yolo_model = YOLONetwork().to(device)
-    chkpt = torch.load('yolo_chkpt', map_location=torch.device(device))
+    chkpt = torch.load(output, map_location=torch.device(device))
     yolo_model.load_state_dict(chkpt['model_state'])
 
     crnn_model = CRNNetwork(alphanum2ind).to(device)
